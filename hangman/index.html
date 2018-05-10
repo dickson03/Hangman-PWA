@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<style type="text/css">
+	.border{
+		border:solid thin #f00;
+	}
+	.clearfix10{
+		margin-top:10%;
+	}
+	body{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.overlay{
+	height:100vh;
+	background-color:cornflowerblue;
+	color:#fff;
+	font-family:'beyno';
+}
+	</style>
+
+</head>
+<body>
+
+	<div class='container-fluid overlay'>
+		<h1 class='text-center clearfix15' style='font-size:4.5em;'>PLAY<br/>HANGMAN</h1>
+		<div class='col-sm-6 col-sm-offset-3'>
+			<div class='col-sm-6'>
+				<a href='javascript:void();' class="col-sm-12 col-xs-12 btn btn-lg btn-success go" style='font-size:2em;'>Go</a>
+			</div>
+			<div class='col-sm-6'>
+				<a href='../' class="col-sm-12 col-xs-12 btn btn-lg btn-danger" style='font-size:2em'>No</a>
+			</div>
+		</div>
+		
+	</div>
+	<div class='container-fluid clearfix3 game hide'>
+		<div class='container'>
+			<div class="row clearfix5">
+					<div class="col-sm-2" style='font-weight:600'></div>
+					<div class="col-sm-8" id='hint'></div>
+					<div class="col-sm-2 col-xs-12"><div class="alert alert-success"><strong>Score : </strong><span id='score'>0</span></div></div>
+					
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 col-xs-12 wordContainer text-center"></div>
+		</div>
+		<div class='container-fluid clearfix5'>
+			<div class='row'>
+					<div class='col-sm-6 col-xs-12 col-sm-offset-3 text-center keyboard'></div>
+				</div>
+			
+		</div>
+	</div>
+</body>
+<style>
+.wordBox, .keyboardBtn{
+	display:inline-block;
+	height:50px;
+	width:50px;
+	border:solid thin #000;
+	margin:1%;
+	text-align:center;
+	text-transform:uppercase;
+	font-size:24px;
+	color:#fff;
+}
+.changeTextColor{
+	color:#000;
+}
+.keyboardBtn{
+	cursor:pointer;
+	color:#000;
+	/*background:#eee;*/
+}
+/*.correctBtn{
+	/*background-color:green;*/
+	color:white;
+}
+.incorrectBtn{
+	background-color:#d14836;
+	color:white;
+}*/
+.clearfix3{
+	margin-top:3%;
+}
+.clearfix5{
+	margin-top:5%;
+}
+.clearfix10{
+	margin-top:10%;
+}
+.clearfix15{
+	margin-top:15%;
+}
+.clearfix20{
+	margin-top:20%;
+}
+.btn-success{
+	color:#fff;
+	border:#333;
+}
+.btn-danger{
+	color:#fff;
+}
+</style>
+	<script>
+
+	t = 0;
+	tryLimit = 0;
+	correct = 0;
+	score = 0;
+	wordArray = [['ABRUPTLY','(1)suddenly and unexpectedly. (2)In a rude or curt manner.'],['ABSURD','wildly unreasonable, illogical, or inappropriate.'],['ABYSS','a deep or seemingly bottomless chasm'],['AFFIX','stick, attach, or fasten (something) to something else'],['ASKEW','not in a straight or level position.'],['AVENUE','a broad road in a town or city, typically having trees at regular intervals along its sides.'],['AWKWARD','causing or feeling uneasy embarrassment or inconvenience.'],['AXIOM','a statement or proposition which is regarded as being established, accepted, or self-evidently true.'],['AZURE','bright blue in colour like a cloudless sky.'],['BAGPIPES','a musical instrument with reed pipes'],['BANDWAGON','a wagon used for carrying a band in a parade or procession'],['BANJO','a stringed instrument of the guitar family, with a round open-backed soundbox of parchment stretched over a metal hoop.'],['BAYOU','a marshy outlet of a lake or river.'],['BEEKEEPER','who keeps honey bees'],['BIKINI','a two-piece swimming costume for women.'],['BLITZ','an intensive or sudden military attack.'],['BLIZZARD','a severe snowstorm with high winds.'],['BOGGLE','(of a person or their mind) be astonished or baffled when trying to imagine something.'],['BOOKWORM','a person who enjoys reading.'],['BOXCAR','an enclosed railway freight wagon, typically with sliding doors on the sides.'],['BOXFUL',' the contents of a box or the amount a box can contain'],['BUCKAROO','a cowboy.'],['BUFFALO','a heavily built wild ox with backward-curving horns, found mainly in the Old World tropics:'],['BUFFOON','a ridiculous but amusing person; a clown.'],['BUZZARD','a large hawklike bird of prey with broad wings and a rounded tail, often seen soaring in wide circles.'],['BUZZING','make a low, continuous humming sound.'],['BUZZWORDS','a word or phrase, often an item of jargon, that is fashionable at a particular time or in a particular context.'],['CALIPH','the chief Muslim civil and religious ruler, regarded as the successor of Muhammad.'],['COBWEB','spider web, especially when old and dusty.'],['COCKINESS','arrogant; pertly self-assertive; conceited:'],['CROQUET','a game played on a lawn, in which wooden balls are driven through a series of square-topped hoops by means of mallets.'],['CRYPT','an underground room or vault beneath a church, used as a chapel or burial place.'],['CURACAO','a liqueur flavoured with the peel of bitter oranges.'],['CYCLE','a series of events that are regularly repeated in the same order.'],['DAIQUIRI','a cocktail containing rum and lime juice.'],['DIRNDL','a woman dress in the style of Alpine peasant costume, with a dirndl skirt and a close-fitting bodice.'],['DISAVOW','deny any responsibility or support for.'],['DIZZYING','make (someone) feel unsteady, confused, or amazed.'],['DUPLEX','a residential building divided into two apartments.'],['DWARVES','plural of a member of a mythical race of short, stocky human-like creatures who are generally skilled in mining and metalworking'],['EMBEZZLE','steal or misappropriate'],['EQUIP','supply with the necessary items for a particular purpose.'],['ESPIONAGE','the practice of spying or of using spies, typically by governments to obtain political and military information.'],['EUOUAE','an abbreviation used in Latin psalters and other liturgical books to show the distribution of syllables'],['EXODUS','a mass departure of people.'],['FISHHOOK',' a device for catching fish either by impaling them in the mouth or, more rarely, by snagging the body of the fish'],['FIXABLE','Capable of being fixed, repairable'],['FJORD','a long, narrow, deep inlet of the sea between high cliffs'],['FLAPJACK','a sweet dense cake made from oats, golden syrup, and melted butter, served in rectangles.'],['FLOPPING','fall, move, or hang in a loose and ungainly way.'],['FLUFFINESS','being light and soft or airy : puffed up.'],['FLYBY','another term for fly-past.'],['FOXGLOVE','a tall Eurasian plant with erect spikes of pinkish-purple (or white) flowers shaped like the fingers of gloves. It is a source of the drug digitalis.'],['FRAZZLE','completely exhausted.'],['FRIZZLE','fry or grill with a sizzling noise.'],['FUCHSIA','a shrub with pendulous tubular flowers that are typically of two contrasting colours.'],['FUNNY','causing laughter or amusement; humorous.'],['GABBY','excessively or annoyingly talkative.'],['GALAXY','a system of millions or billions of stars, together with gas and dust, held together by gravitational attraction.'],['GALVANIZE','coat (iron or steel) with a protective layer of zinc.'],['GAZEBO','a small building, especially one in the garden of a house, that gives a wide view of the surrounding area.'],['GIAOUR','a non-Muslim, especially a Christian.'],['GIZMO','a gadget, especially one whose name the speaker does not know or cannot recall.'],['GLOWWORM','a soft-bodied beetle with luminescent organs in the abdomen, especially the larvalike wingless female which emits light to attract the flying male.'],['GLYPH','a hieroglyphic character or symbol.'],['GNARLY','difficult, dangerous, or challenging.'],['GNOSTIC','relating to knowledge, especially esoteric mystical knowledge.'],['GOSSIP','a conversation about other people; an instance of gossiping.'],['GROG','spirits (originally rum) mixed with water.'],['HAIKU','a Japanese poem of seventeen syllables, in three lines of five, seven, and five, traditionally evoking images of the natural world.'],['HAPHAZARD','lacking any obvious principle of organization.'],['HYPHEN','the sign -, used to join words to indicate that they have a combined meaning'],['IATROGENIC','relating to illness caused by medical examination or treatment.'],['ICEBOX','a chilled box or cupboard for keeping something cold, especially food.'],['INJURY','an instance of being injured.'],['IVORY','a hard creamy-white substance composing the main part of the tusks of an elephant, walrus, or narwhal, often (especially formerly) used to make ornaments and other articles.'],['IVY','a woody evergreen Eurasian climbing plant, typically having shiny, dark green five-pointed leaves.'],['JACKPOT','a large cash prize in a game or lottery, especially one that accumulates until it is won.'],['JAUNDICE','a medical condition with yellowing of the skin or whites of the eyes, arising from excess of the pigment bilirubin and typically caused by obstruction of the bile duct, by liver disease'],['JAWBREAKER','a word that is very long or hard to pronounce.'],['JAYWALK','cross or walk in the street or road unlawfully or without regard for approaching traffic.'],['JAZZ','a type of music of black American origin which emerged at the beginning of the 20th century, characterized by improvisation, syncopation, and usually a regular or forceful rhythm.'],['JAZZY','of, resembling, or in the style of jazz.'],['JELLY','a sweet soft food made by cooking fruit with sugar to preserve it.'],['JIGSAW','a puzzle consisting of picture printed on cardboard'],['JINX','a person or thing that brings bad luck'],['JIUJITSU','a japanese system of unarmed combat'],['JOCKEY','a person who rides in horse races'],['JOGGING','activity of running at a steady pace as a form of physical exercise'],['JOKING','talk humorously'],['JOVIAL','cheerful and friendly'],['JOYFUL','feeling or expressing or causing great pleasure and happiness'],['JUICY','full of juice'],['JUKEBOX','a machine that automatically plays a selected musical recording when a coin is inserted'],['JUMBO','a very large person or thing'],['KAYAK','a canoe of a type used originally by the inuit'],['KAZOO','a small simple wind musical instrument.'],['KEYHOLE','a hole in a lock into which key is inserted'],['KHAKI','a strong cotton or wool fabric of a dull brownish-yellow color'],['KILOBYTE','a unit of memory or data equals to 1,024 bytes.'],['KIOSK','a small structure in public area used for providing information or displaying advertisements'],['KITSCH','art, object or design considered to be in poor taste because of excessive garnishing or sentimentality but sometimes appriciated in an ironic or knowing way'],['KLUTZ','a clumsy awkward or foolish person'],['KNAPSACK','a soldier or hiker bag with shoulder straps carried on back.'],['LARYNX','a hollow muscular organ forming an air passage to the lungs.'],['LENGTHS','the measurement or xtnd of something from end to end'],['LUCKY','having , bringing, or resulting from good luck'],['LUXURY','a state of great comfort or elegance'],['LYMPH','a colorless fluid containing white blood cells'],['MARQUIS','a nobleman ranking above a count a below a duke'],['MATRIX','a rectangular array of quantities or experssions in rows and columns that is treated as single entity.'],['MEGAHERTZ','a unit of frequency equal to one milion Hertz'],['MICROWAVE','an electromagnetic wave in the range of 0.001-0.3m'],['MNEMONIC','a system such as a pattern of leters, ideas which helps in remembering something'],['MYSTIFY','mysterious'],['NAPHTHA','a flammable oil containing various hydrocarbons obtained by dry distillation of organic substance such as coal or petroleum.'],['NIGHTCLUB','a club that is open from the evening until early morning, having facilities such as a bar and disco or other entertainment.'],['NOWADAYS','at the present time, in contrast with the past.'],['NUMBSKULL','a stupid or foolish person.'],['NYMPH','a mythological spirit of nature imagined as a beautiful maiden inhabiting rivers, woods, or other locations.'],['ONYX','a semi-precious variety of agate with different colours in layers.'],['OVARY','a female reproductive organ in which ova or eggs are produced, present in humans and other vertebrates as a pair.'],['OXIDIZE','undergo or cause to undergo a reaction in which electrons are lost to another species.'],['OXYGEN','a colourless, odourless reactive gas, the chemical element of atomic number 8 and the life-supporting component of the air.'],['PAJAMA','a loose-fitting jacket and trousers for sleeping in.'],['PEEKABOO','a game played with a young child, which involves hiding and suddenly reappearing, saying peekaboo.'],['PHLEGM','the thick viscous substance secreted by the mucous membranes of the respiratory passages, especially when produced in excessive quantities during a cold.'],['PIXEL','a minute area of illumination on a display screen, one of many from which an image is composed.'],['PIZAZZ','an attractive combination of vitality and glamour.'],['PNEUMONIA','lung inflammation caused by bacterial or viral infection, in which the air sacs fill with pus and may become solid. Inflammation may affect lungs'],['POLKA','a lively dance of Bohemian origin in duple time.'],['PSHAW','an expression of contempt or impatience.'],['PSYCHE','the human soul, mind, or spirit.'],['PUPPY','a young dog.'],['PUZZLING','causing one to be puzzled; perplexing.'],['QUARTZ','a hard mineral consisting of silica, found widely in igneous and metamorphic rocks and typically occurring as colourless or white hexagonal prisms.'],['QUEUE','a line or sequence of people or vehicles awaiting their turn to be attended to or to proceed.'],['QUIPS','a witty remark.'],['QUIXOTIC','extremely idealistic; unrealistic and impractical.'],['QUIZ','a test of knowledge, especially as a competition between individuals or teams as a form of entertainment.'],['QUORUM','the minimum number of members of an assembly or society that must be present at any of its meetings to make the proceedings of that meeting valid.'],['RAZZMATAZZ','noisy, showy, and exciting activity and display designed to attract and impress.'],['RHUBARB','the thick reddish or green leaf stalks of a cultivated plant of the dock family, which are eaten as a fruit after cooking.'],['RHYTHM','a strong, regular repeated pattern of movement or sound.'],['RICKSHAW','a light two-wheeled passenger vehicle drawn by one or more people, chiefly used in Asian countries.'],['SCHNAPPS','a strong alcoholic drink resembling gin.'],['SCRATCH','score or mark the surface of (something) with a sharp or pointed object.'],['SHIV','a knife or razor used as a weapon.'],['SNAZZY','stylish and attractive.'],['SPHINX','a winged monster of Thebes, having a heaad of a woman and body of a lion. It propounded a riddle about the three ages of man, killing those who failed to solve it'],['SPRITZ','squirt or spray a liquid at or on to (something) in quick, short bursts.'],['SQUAWK','(of a bird) make a loud, harsh noise.'],['STAFF','all the people employed by a particular organization.'],['STRENGTH','the quality or state of being physically strong.'],['STRETCH','(of something soft or elastic) be made or be capable of being made longer or wider without tearing or breaking.'],['STRONGHOLD','a place that has been fortified so as to protect it against attack.'],['STYMIED','prevent or hinder the progress of.'],['SUBWAY','a tunnel under a road for use by pedestrians.'],['SWIVEL','a coupling between two parts enabling one to revolve without turning the other.'],['SYNDROME','a group of symptoms which consistently occur together, or a condition characterized by a set of associated symptoms.'],['THRIFTLESS','(of a person or their behaviour) spending money in an extravagant and wasteful way.'],['THUMBSCREW','a screw with a protruding winged or flattened head for turning with the thumb and forefinger.'],['TOPAZ','a precious stone, typically colourless, yellow, or pale blue, consisting of an aluminium silicate that contains fluorine.'],['TRANSCRIPT','a written or printed version of material originally presented in another medium.'],['TRANSGRESS','go beyond the limits of (what is morally, socially, or legally acceptable).'],['TRANSPLANT','move or transfer (someone or something) to another place or situation.'],['TRIPHTHONG','a union of three vowels (letters or sounds) pronounced in one syllable (as in fire ).'],['TWELFTH',''],['TWELFTHS','constituting number twelve in a sequence; 12th.'],['UNKNOWN','not known or familiar.'],['UNWORTHY','not deserving respect or attention.'],['UNZIP','unfasten the zip fastener of.'],['UPTOWN','of, in, or characteristic of the residential area of a town or city.'],['VAPORIZE','convert or be converted into vapour.'],['VIXEN','(1) a female fox. (2) a spirited or quarrelsome woman.'],['VODKA','an alcoholic spirit of Russian origin made by distillation of rye, wheat, or potatoes.'],['VOODOO','a black religious cult practised in the Caribbean and the southern US, combining elements of Roman Catholic ritual with traditional African magical and religious rites, and characterized by sorcery and spirit possession.'],['VORTEX','a whirling mass of fluid or air, especially a whirlpool or whirlwind.'],['WALKWAY','a passage or path for walking along, especially a raised passageway connecting different sections of a building or a wide path in a park or garden.'],['WALTZ','a dance in triple time performed by a couple, who turn rhythmically round and round as they progress around the dance floor.'],['WAVE','move hand to and fro in greeting or as a signal.'],['WAVY','having or consisting of a series of undulating and wave-like curves.'],['WAXY','resembling wax in consistency or appearance.'],['WELLSPRING','an abundant source of something.'],['WHEEZY','making the sound of a person wheezing.'],['WHISKEY','a spirit distilled from malted grain, especially barley or rye.'],['WHIZZING','move quickly through the air with a whistling or buzzing sound.'],['WHOMEVER','used instead of ‘whoever’ as the object of a verb or preposition.'],['WIMPY','weak and cowardly or feeble.'],['WITCHCRAFT','the practice of magic, especially black magic; the use of spells.'],['WIZARD','(in legends and fairy tales) a man who has magical powers.'],['WOOZY','unsteady, dizzy, or dazed.'],['WRISTWATCH','a watch worn on a strap round the wrist.'],['WYVERN','a winged two-legged dragon with a barbed tail.'],['XYLOPHONE','a musical instrument played by striking a row of wooden bars of graduated length with one or more small wooden or plastic beaters.'],['YACHTSMAN','a person who sails yachts.'],['YIPPEE','expressing wild excitement or delight.'],['YOKED','put a yoke on (a pair of animals); couple or attach with or to a yoke.'],['YOUTHFUL','young or seeming young.'],['YUMMY','(of food) delicious.'],['ZEPHYR','a soft gentle breeze.'],['ZIGZAG','a line or course having abrupt alternate right and left turns.'],['ZILCH','nothing'],['ZIPPER','a zip fastener.'],['ZODIAC','a belt of the heavens within about 8° either side of the ecliptic, including all apparent positions of the sun, moon, and most familiar planets. It is divided into twelve equal divisions or signs'],['ZOMBIE','a corpse said to be revived by witchcraft, especially in certain African and Caribbean religions.']];
+
+	function createWord(){
+		t=0;
+		tryLimit = 0;
+		correct = 0;		
+		var i = Math.floor((Math.random() * wordArray.length-1) + 1);
+		var word = wordArray[i][0].split("");
+		var clue =wordArray[i][1];
+		tryLimit  = word.length;
+		$('#hint').html("<div class='alert alert-info' role='alert'>Hint:<br/>"+clue+"</div>");
+		$('.wordContainer').html('');
+		if($('.keyboardBtn').hasClass('btn-danger')){
+			$('.keyboardBtn').removeClass('btn-danger');
+			$('.keyboardBtn').addClass('btn-default');
+		}
+		if($('.keyboardBtn').hasClass('btn-success')){
+			$('.keyboardBtn').removeClass('btn-success');
+			$('.keyboardBtn').addClass('btn-default');
+		}
+		
+		$.each(word, function( key, value ) {
+		  $('.wordContainer').append("<div class='wordBox tick' data-char='"+value+"'>"+value+"</div>");
+		});		
+	}
+			createWord();
+	//keyboard
+	for (var j = 65; j < 65+26; j++) {
+		$('.keyboard').append("<div class='keyboardBtn btn btn-default' data-char='"+String.fromCharCode(j)+"'>"+String.fromCharCode(j)+"</div>");
+	}
+	//end of keyboard
+	$(document).on('click','.keyboardBtn', function(){
+		
+		if(t < tryLimit){
+			var handle = $(this);
+			var correctCount = 0;
+			
+				$('.wordBox').each(function(){
+					if($(this).attr('data-char')==handle.attr('data-char')){
+						correctCount = correctCount+1;
+					}
+					
+				});
+				if(correctCount > 0){
+					handle.removeClass('btn-default');
+					handle.addClass('btn-success');
+					$('.wordBox').each(function(){
+						if($(this).attr('data-char')==handle.attr('data-char')){
+							$(this).addClass('changeTextColor');
+							$(this).removeClass('tick');
+							correct = correct+1;
+						}
+						if(correct==tryLimit){
+							alert('Congrats');
+							score = score+1;
+							$('#score').html(score);
+							setTimeout(function(){
+								createWord();
+							},1500);
+						}
+					});
+				}else{
+					handle.removeClass('btn-default');
+					handle.addClass('btn-danger');
+				}
+			t=t+1;
+		}else{
+			if(correct!=tryLimit){
+				alert('Try Again');
+				$('.wordBox').each(function(){
+						$(this).addClass('changeTextColor');
+				});				
+			}
+				setTimeout(function(){
+					createWord();
+				},1500);
+
+		}
+	});
+		$('.go').click(function(){
+		$('.overlay').fadeOut(1000);
+		setTimeout(function(){
+			$('.game').removeClass('hide');
+		},1200);
+	});
+	</script>
+	
+</html>
