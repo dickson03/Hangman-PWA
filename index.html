@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Theme Made By www.w3schools.com - No Copyright -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/snackbar.css">
+</head>
+<body >
+<h2>BASIC PWA</h2><br/>
+
+<h3>
+To check:<br/>
+1. Let the page load completely<br/>
+2. Refresh the page once or maybe twice.<br/>
+3. Go to browser console and go Offline.<br/>
+4. Refresh the page once you are offline. you may see the default "This site can’t be reached" message. Just keep on refreshing until you see this page again.<br/>
+4. If all resources are added properly, you will see a snackbar "You are offline" with buttons "Play Hangman" and "Stay Here".<br/>
+5. Click on "Play Hangman" and you will be redirected or stay there.<br/>
+P.s : If any one of the resources you are caching fails due to any reason, the whole caching fails. So, double check resource path in sw.js and do look for console.log<br/>
+</h3>
+<div id="snackbar"></div>
+<script>
+function snackbar(message) {
+    var x = document.getElementById("snackbar");
+    x.innerHTML = message;
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 10000);
+}
+function redirect(){
+    window.location.href="hangman";
+}
+function hidebar(){
+    var x = document.getElementById("snackbar");
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 1000);
+}
+	if(navigator.serviceWorker){
+		navigator.serviceWorker.register('sw.js',).then(function(reg){
+		});
+	}
+	
+	if (navigator.onLine === false) {
+	console.log('Offline');
+        snackbar("You are Offline<br/><input type='button' onClick='redirect();' value='PLAY HANGMAN'/><input type='button' onClick='hidebar();' value='STAY HERE'/>");
+    }
+</script>
+
+
+</body>
+</html>
